@@ -42,7 +42,7 @@ $.Callback = function(packageObj)
 {
   console.log(packageObj);
   $('#carrierLabel').text(packageObj.carrier);
-  $('#idLabel').text(packageObj.id);
+  $('#idLabel').text('Tracking #' + packageObj.id);
   if (!packageObj.error)
   {
     $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : '');
