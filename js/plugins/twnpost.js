@@ -61,7 +61,7 @@ $.carrier_TWNPOST = function(code)
     error: function()
     {
       p.error = true;
-      callback(p);
+      $.Callback(p);
     }
   })
   .done(function() {
