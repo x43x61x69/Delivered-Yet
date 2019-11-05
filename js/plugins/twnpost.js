@@ -31,6 +31,7 @@ $.carrier_TWNPOST = function(code)
       const msg = data[0];
       const status = data[1];
       if (status['body']['result'] == 'success' &&
+          msg['body']['host_rs'] !== undefined &&
           msg['body']['host_rs'] !== null)
       {
         p.type = $.trim(msg['body']['host_rs']['MAILTYPE']);
