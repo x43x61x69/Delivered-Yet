@@ -55,7 +55,7 @@ $.carrier_TWNPOST = function(code)
         p.error = true;
         if (msg['body']['msgData'] !== undefined)
         {
-          p.errorMsg = msg['body']['msgData'];
+          p.errorMsg = msg['body']['msgData'].replace('KEY|', '');
         }
       }
     },
