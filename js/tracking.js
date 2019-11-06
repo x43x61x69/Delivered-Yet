@@ -30,6 +30,7 @@ function PackageObj()
   this.carrier = null;
   this.id = null;
   this.url = null;
+  this.description = null;
   this.reference = null;
   this.date = null;
   this.type = null;
@@ -42,7 +43,7 @@ function PackageObj()
 
 $.Callback = function(packageObj)
 {
-  console.log(packageObj);
+  // console.log(packageObj);
   $('#carrierLabel').text(packageObj.carrier);
   $('#idLabel').text('Tracking #' + packageObj.id);
 
@@ -72,7 +73,15 @@ $.Callback = function(packageObj)
   if (!packageObj.error)
   {
     const count = packageObj.status.length;
-    $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transmit' : 'No Information'));
+    if (packageObj.description != null)
+    {
+      $('#trackingLabel').text(packageObj.description);
+    }
+    else
+    {
+      $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transit' : 'No Information'));
+    }
+
     for (var i = 0; i < count; i++)
     {
       $("#statusTable").find('tbody')

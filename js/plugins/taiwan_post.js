@@ -1,6 +1,6 @@
 // Taiwan Post
 
-$.carrier_TWNP = function(code)
+$.Carrier_TWNP = function(code)
 {
   var p = new PackageObj();
   p.carrier = '中華郵政';
@@ -44,6 +44,10 @@ $.carrier_TWNP = function(code)
           s.date = $.GetDate(items[i]['DATIME'], 'YYYYMMDDHHmmss', 8);
           s.location = $.trim(items[i]['BRHNC']);
           s.description = $.trim(items[i]['STATUS']);
+          if (p.description == null)
+          {
+            p.description = s.description;
+          }
           if (s.description == '投遞成功')
           {
             p.delivered = true;
@@ -66,7 +70,8 @@ $.carrier_TWNP = function(code)
       $.Callback(p);
     }
   })
-  .done(function() {
+  .done(function()
+  {
     $.Callback(p);
   });
 }
