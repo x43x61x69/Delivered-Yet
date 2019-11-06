@@ -12,6 +12,7 @@ $.Carrier_PBI = function(code)
 
 $.Carrier_UPS = function(code)
 {
+  $.Carrier_PBI_Supported(code, 'https://www.ups.com/track?tracknum=' + code, 'UPS');
 }
 
 $.Carrier_USPS = function(code)
@@ -45,7 +46,7 @@ $.Carrier_PBI_Supported = function(code, url, carrierName)
 $.Carrier_PBI_GetToken = function(p, key, secret)
 {
   $.ajax({
-    url: PBI_BASE_URL + '/oauth/token',
+    url: PBI_BASE_URL + 'oauth/token',
     type: 'POST',
     contentType : 'application/x-www-form-urlencoded',
     dataType: 'json',
@@ -84,7 +85,7 @@ $.Carrier_PBI_GetToken = function(p, key, secret)
 $.Carrier_PBI_Track = function(p, accessToken)
 {
   $.ajax({
-    url: PBI_BASE_URL + '/shippingservices/v1/tracking/' + p.id + '?packageIdentifierType=TrackingNumber&carrier=' + p.carrier,
+    url: PBI_BASE_URL + 'shippingservices/v1/tracking/' + p.id + '?packageIdentifierType=TrackingNumber&carrier=' + p.carrier,
     type: 'GET',
     contentType : 'application/x-www-form-urlencoded',
     dataType: 'json',
