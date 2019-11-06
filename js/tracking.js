@@ -45,12 +45,11 @@ $.Callback = function(packageObj)
 {
   // console.log(packageObj);
   $('#carrierLabel').text(packageObj.carrier);
-  $('#idLabel').text('Tracking #' + packageObj.id);
-
-  if (packageObj.url != null)
-  {
-    $('#carrierURL').attr("href", packageObj.url);
-  }
+  $('#idLabel').text('Tracking Number: ')
+  .append($('<a>')
+    .text(packageObj.id)
+    .attr("href", packageObj.url !== null ? packageObj.url : '#')
+  );
 
   if (packageObj.date != null)
   {
