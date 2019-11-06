@@ -1,5 +1,6 @@
 // Pitney Bowes
 // API: https://shipping.pitneybowes.com/overview.html
+// Private API (CORS): https://parceltracking.pb.com/ptsapi/track-packages/[TRACKING_NUM]
 // Get API Key here: https://signup.pitneybowes.com/signup/shipping
 // Usage: ?carrier=[CARRIER_NAME]&id=[TRACKING_NUM]&key=[PBI_API_KEY]&secret=[PBI_API_SECRET]
 
