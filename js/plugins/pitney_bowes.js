@@ -104,7 +104,7 @@ $.Carrier_PBI_Track = function(p, accessToken)
       const msg = xhr.responseJSON['errors'][0];
       if (msg !== null)
       {
-        console.log(msg);
+        // console.log(msg);
         if (msg['userMessage'] !== null)
         {
           p.errorMsg = msg['userMessage'];
@@ -119,7 +119,7 @@ $.Carrier_PBI_Track = function(p, accessToken)
   })
   .done(function(data)
   {
-    console.log(data);
+    // console.log(data);
     const msg = data;
     p.description = msg['status'];
     if (p.description !== null)
