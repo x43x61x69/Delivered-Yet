@@ -1,9 +1,10 @@
 // Taiwan Post
 
-$.carrier_TWNPOST = function(code)
+$.carrier_TWNP = function(code)
 {
   var p = new PackageObj();
   p.carrier = '中華郵政';
+  p.url = 'http://postserv.post.gov.tw/pstmail/main_mail.html';
   p.id = code;
 
   $.ajax({

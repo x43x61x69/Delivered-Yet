@@ -29,6 +29,8 @@ function PackageObj()
 {
   this.carrier = null;
   this.id = null;
+  this.url = null;
+  this.reference = null;
   this.date = null;
   this.type = null;
   this.weight = -1;
@@ -43,10 +45,35 @@ $.Callback = function(packageObj)
   console.log(packageObj);
   $('#carrierLabel').text(packageObj.carrier);
   $('#idLabel').text('Tracking #' + packageObj.id);
+
+  if (packageObj.url != null)
+  {
+    $('#carrierURL').attr("href", packageObj.url);
+  }
+
+  if (packageObj.date != null)
+  {
+    $('#dateLabel').text('Estimated Delivery: ' + moment(packageObj.date).format('YYYY/MM/DD hh:MM:SS A'));
+  }
+  else
+  {
+    $('#dateLabel').remove();
+  }
+
+  if (packageObj.reference != null)
+  {
+    $('#refLabel').text('Reference: ' + packageObj.reference);
+  }
+  else
+  {
+    $('#refLabel').remove();
+  }
+
   if (!packageObj.error)
   {
-    $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : '');
-    for (var i = 0; i < packageObj.status.length; i++)
+    const count = packageObj.status.length;
+    $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transmit' : 'No Information'));
+    for (var i = 0; i < count; i++)
     {
       $("#statusTable").find('tbody')
         .append($('<tr>')
@@ -58,7 +85,6 @@ $.Callback = function(packageObj)
   }
   else
   {
-    $('#trackingLabel').text(packageObj.errorMsg != null ? packageObj.errorMsg : 'Error');
-    $("#statusTable").remove();
+    $('#trackingLabel').text(packageObj.errorMsg != null ? packageObj.errorMsg : 'Unknown Error');
   }
 }

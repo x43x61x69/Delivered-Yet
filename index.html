@@ -5,15 +5,11 @@
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,400,400i,700,700i" rel="stylesheet">
 </head>
 <body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
-    <!-- Sidebar -->
-    <!-- End of Sidebar -->
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
@@ -25,7 +21,9 @@
           <!-- Begin Page Content -->
           <div class="container-fluid">
           <!-- Page Heading -->
-            <h1 id='carrierLabel' class="h3 mb-2 text-gray-800"></h1>
+            <a id='carrierURL' href='#' target='_blank'><h1 id='carrierLabel' class="h3 mb-2 text-gray-800"></h1></a>
+            <p id='dateLabel' class="mb-4"></p>
+            <p id='refLabel' class="mb-4"></p>
             <p id='trackingLabel' class="mb-4"></p>
             <div class="card shadow mb-4">
               <div class="card-header py-3">
@@ -72,33 +70,40 @@
   </div>
   <!-- End of Page Wrapper -->
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
-
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script> -->
-  <!-- <script src="js/jquery.min.js"></script> -->
-  <script src="js/moment.min.js"></script>
-  <script src="js/plugins/twnpost.js"></script>
-  <script src="js/tracking.js"></script>
+  <!-- JavaScript-->
   <script>
+    const timestamp = Date.now();
+    document.write("<link href='css/sb-admin-2.min.css?v=" + timestamp + "' rel='stylesheet'>");
+    document.write("<script src='vendor/jquery/jquery.min.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='vendor/bootstrap/js/bootstrap.bundle.min.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='vendor/jquery-easing/jquery.easing.min.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='js/sb-admin-2.min.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='js/moment.min.js?v=" + timestamp + "'><\/script>");
 
+    document.write("<script src='js/tracking.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='js/plugins/taiwan_post.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='js/plugins/pitney_bowes.js?v=" + timestamp + "'><\/script>");
+  </script>
+  <script>
     $(document).ready(function()
     {
-      if ($.URLParam('carrier'))
+      const trackingId = $.URLParam('id');
+      if (trackingId)
       {
-        const carrier = parseInt($.URLParam('carrier'));
-        switch (carrier) {
-          case 886000: // Taiwan Post
-            $.carrier_TWNPOST($.URLParam('id'));
-            break;
-          default:
+        const carrier = $.URLParam('carrier');
+        var funcName = 'carrier_';
+        if (carrier)
+        {
+          funcName += carrier.toUpperCase();
+        }
+        else
+        {
+          funcName += 'TWNP';
+        }
 
+        if ($.isFunction($[funcName]))
+        {
+          $[funcName](trackingId);
         }
       }
     });
