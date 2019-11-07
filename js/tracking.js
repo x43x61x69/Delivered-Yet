@@ -58,7 +58,7 @@ $.Callback = function(packageObj)
 
   if (packageObj.date !== null)
   {
-    $('#dateLabel').text('Estimated Delivery: ' + packageObj.date.format('YYYY/MM/DD hh:MM:SS A Z'));
+    $('#dateLabel').text('Estimated Delivery: ' + packageObj.date.format('YYYY/MM/DD hh:MM:SS A Z') + ' (' + packageObj.date.fromNow() + ')');
   }
   else
   {
@@ -83,16 +83,35 @@ $.Callback = function(packageObj)
     $('#weightLabel').remove();
   }
 
+  const statusCount = packageObj.status.length;
+  if (statusCount > 0)
+  {
+    $('#updateLabel').text('Update: ' + packageObj.status[0].date.fromNow());
+  }
+  else
+  {
+    $('#updateLabel').remove();
+  }
+
+  if (statusCount > 1)
+  {
+    $('#durationLabel').text('Duration: ' + moment.duration(packageObj.status[0].date.diff(packageObj.status[statusCount - 1].date)).humanize());
+  }
+  else
+  {
+    $('#durationLabel').remove();
+  }
+
   if (!packageObj.error)
   {
     const count = packageObj.status.length;
     if (packageObj.description !== null)
     {
-      $('#trackingLabel').text(packageObj.description);
+      $('#trackingLabel').text('Status: ' + packageObj.description);
     }
     else
     {
-      $('#trackingLabel').text(packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transit' : 'No Information'));
+      $('#trackingLabel').text('Status: ' + packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transit' : 'No Information'));
     }
 
     for (var i = 0; i < count; i++)
