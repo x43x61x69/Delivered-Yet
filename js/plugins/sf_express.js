@@ -17,7 +17,7 @@ $.Carrier_SFEX = function(code)
 
   $.get('http://www.sftrack.net/cgi-bin/GInfo.dll?MfcISAPICommand=EmmisTrackGen&w=sftracken&cemskind=%CB%B3%B7%E1IBS&cno=' + code, function(data)
   {
-    const content = $(data).find("script:contains('document.writeln(MadeLine(')").html();
+    const content = $.s2t($(data).find("script:contains('document.writeln(MadeLine(')").html());
     const items = content.split('\n');
     for (var i = items.length - 1; i > 0; i--)
     {
