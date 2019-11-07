@@ -48,6 +48,9 @@ function PackageObj()
 $.Callback = function(packageObj)
 {
   // console.log(packageObj);
+
+  document.title = packageObj.carrier + ' ' + packageObj.id + ' | Delivered Yet?';
+
   $('#carrierLabel').text(packageObj.carrier);
   $('#idLabel').text('Tracking Number: ')
   .append($('<a>')
@@ -126,7 +129,7 @@ $.Callback = function(packageObj)
       {
         $("#statusTable").find('tbody')
           .append($('<tr>')
-            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A') + (i < count - 1 ? ' (' + moment.duration(packageObj.status[i].date.diff(packageObj.status[i + 1].date)).humanize() + ')' : '')))
             .append($('<td>').text(packageObj.status[i].location))
             .append($('<td>')
             .append($('<a>')
@@ -140,7 +143,7 @@ $.Callback = function(packageObj)
       {
         $("#statusTable").find('tbody')
           .append($('<tr>')
-            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A') + (i < count - 1 ? ' (' + moment.duration(packageObj.status[i].date.diff(packageObj.status[i + 1].date)).humanize() + ')' : '')))
             .append($('<td>').text(packageObj.status[i].location))
             .append($('<td>').text(packageObj.status[i].description))
           );
