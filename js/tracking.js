@@ -53,6 +53,7 @@ $.Callback = function(packageObj)
   .append($('<a>')
     .text(packageObj.id)
     .attr("href", packageObj.url !== null ? packageObj.url : '#')
+    .attr("target", '_blank')
   );
 
   if (packageObj.date !== null)
