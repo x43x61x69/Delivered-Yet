@@ -13,8 +13,11 @@ $.URLParam = function(name)
 $.GetDate = function(dateString, format, offset)
 {
   var mDate = moment(dateString, format);
-  mDate.utcOffset(offset);
-  return mDate.toDate();
+  if (offset !== null)
+  {
+    mDate.utcOffset(offset);
+  }
+  return mDate;
 }
 
 function StatusObj()
@@ -22,6 +25,7 @@ function StatusObj()
   this.date = null;
   this.location = null;
   this.description = null;
+  this.url = null;
   this.error = false;
 };
 
@@ -34,7 +38,7 @@ function PackageObj()
   this.reference = null;
   this.date = null;
   this.type = null;
-  this.weight = -1;
+  this.weight = null;
   this.delivered = false;
   this.status = [];
   this.error = false;
@@ -51,16 +55,16 @@ $.Callback = function(packageObj)
     .attr("href", packageObj.url !== null ? packageObj.url : '#')
   );
 
-  if (packageObj.date != null)
+  if (packageObj.date !== null)
   {
-    $('#dateLabel').text('Estimated Delivery: ' + moment(packageObj.date).format('YYYY/MM/DD hh:MM:SS A'));
+    $('#dateLabel').text('Estimated Delivery: ' + packageObj.date.format('YYYY/MM/DD hh:MM:SS A Z'));
   }
   else
   {
     $('#dateLabel').remove();
   }
 
-  if (packageObj.reference != null)
+  if (packageObj.reference !== null)
   {
     $('#refLabel').text('Reference: ' + packageObj.reference);
   }
@@ -69,10 +73,19 @@ $.Callback = function(packageObj)
     $('#refLabel').remove();
   }
 
+  if (packageObj.weight !== null)
+  {
+    $('#weightLabel').text('Weight: ' + packageObj.weight);
+  }
+  else
+  {
+    $('#weightLabel').remove();
+  }
+
   if (!packageObj.error)
   {
     const count = packageObj.status.length;
-    if (packageObj.description != null)
+    if (packageObj.description !== null)
     {
       $('#trackingLabel').text(packageObj.description);
     }
@@ -83,12 +96,34 @@ $.Callback = function(packageObj)
 
     for (var i = 0; i < count; i++)
     {
-      $("#statusTable").find('tbody')
-        .append($('<tr>')
-          .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:MM:SS A')))
-          .append($('<td>').text(packageObj.status[i].location))
-          .append($('<td>').text(packageObj.status[i].description))
-        );
+      $('#idLabel').text('Tracking Number: ')
+      .append($('<a>')
+        .text(packageObj.id)
+        .attr("href", packageObj.url !== null ? packageObj.url : '#')
+      );
+      if (packageObj.status[i].url !== null)
+      {
+        $("#statusTable").find('tbody')
+          .append($('<tr>')
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(packageObj.status[i].location))
+            .append($('<td>')
+            .append($('<a>')
+              .text(packageObj.status[i].description)
+              .attr("href", packageObj.status[i].url)
+              .attr("target", '_blank')
+            ))
+          );
+      }
+      else
+      {
+        $("#statusTable").find('tbody')
+          .append($('<tr>')
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(packageObj.status[i].location))
+            .append($('<td>').text(packageObj.status[i].description))
+          );
+      }
     }
   }
   else

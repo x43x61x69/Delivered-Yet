@@ -8,7 +8,8 @@ const PBI_BASE_URL = 'https://api-sandbox.pitneybowes.com/';
 
 $.Carrier_PBI = function(code)
 {
-  $.Carrier_PBI_Supported(code, 'https://parceltracking.pb.com/' + code, 'PBI');
+  // $.Carrier_PBI_Supported(code, 'https://parceltracking.pb.com/' + code, 'PBI');
+  $.Carrier_PBI_Private(code, 'https://parceltracking.pb.com/' + code);
 }
 
 $.Carrier_UPS = function(code)
@@ -31,6 +32,95 @@ $.Carrier_NEWG = function(code)
   $.Carrier_PBI_Supported(code, 'https://tracking.pb.com/' + code, 'NEWGISTICS');
 }
 
+$.Carrier_PBI_Private = function(code, url)
+{
+  const key = $.URLParam('key');
+  const secret = $.URLParam('secret');
+
+  var p = new PackageObj();
+  p.carrier = 'Pitney Bowes';
+  p.url = url;
+  p.id = code;
+
+  $.ajaxPrefilter( function (options) {
+    if (options.crossDomain && jQuery.support.cors) {
+      var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+      options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+    }
+  });
+
+  $.get('https://parceltracking.pb.com/ptsapi/track-packages/' + code, function(data)
+  {
+    // console.log(data);
+    const msg = data;
+    p.carrier = msg['service'];
+    p.reference = msg['orderId'];
+    p.weight = msg['weight'] + ' ' + msg['weightUnit'];
+    p.date = $.GetDate(msg['estimatedDeliveryDate'] + ' ' + msg['estimatedDeliveryTime'], 'YYYY-MM-DD HH:mm:ssZ');
+
+    const currentStatus = msg['currentStatus'];
+    if (currentStatus !== null)
+    {
+      p.description = currentStatus['eventDescription'];
+      var s = new StatusObj();
+      s.description = p.description;
+      if (currentStatus['packageStatus'] == 'DELIEVERED')
+      {
+        p.delivered = true;
+      }
+      var loc = [];
+      s.date = $.GetDate(currentStatus['eventDate'] + ' ' + currentStatus['eventTime'], 'YYYY-MM-DD HH:mm:ssZ');
+      const locElm = currentStatus['eventLocation'];
+      if (locElm['city'] != null)
+      {
+        loc.push(locElm['city']);
+      }
+      if (locElm['countyOrRegion'] != null)
+      {
+        loc.push(locElm['countyOrRegion']);
+      }
+      if (locElm['country'] != null)
+      {
+        loc.push(locElm['country']);
+      }
+      s.location = loc.join(', ');
+      p.status.push(s);
+    }
+
+    const items = msg['scanHistory']['scanDetails'];
+    for (var i = 0; i < items.length; i++)
+    {
+      // console.log("data: " + JSON.stringify(items[i]));
+      var s = new StatusObj();
+      var loc = [];
+      s.description = items[i]['eventDescription'];
+      s.date = $.GetDate(items[i]['eventDate'] + ' ' + items[i]['eventTime'], 'YYYY-MM-DD HH:mm:ssZ');
+      const locElm = items[i]['eventLocation'];
+      if (locElm['city'] != null)
+      {
+        loc.push(locElm['city']);
+      }
+      if (locElm['countyOrRegion'] != null)
+      {
+        loc.push(locElm['countyOrRegion']);
+      }
+      if (locElm['country'] != null)
+      {
+        loc.push(locElm['country']);
+      }
+      s.location = loc.join(', ');
+      s.url = items[i]['trackingUrl'];
+      p.status.push(s);
+    }
+
+    $.Callback(p);
+  })
+  .fail(function() {
+    p.error = true;
+    $.Callback(p);
+  });
+}
+
 $.Carrier_PBI_Supported = function(code, url, carrierName)
 {
   const key = $.URLParam('key');
@@ -40,6 +130,13 @@ $.Carrier_PBI_Supported = function(code, url, carrierName)
   p.carrier = carrierName;
   p.url = url;
   p.id = code;
+
+  $.ajaxPrefilter( function (options) {
+    if (options.crossDomain && jQuery.support.cors) {
+      var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+      options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+    }
+  });
 
   $.Carrier_PBI_GetToken(p, key, secret);
 }

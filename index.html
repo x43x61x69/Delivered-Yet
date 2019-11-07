@@ -22,8 +22,9 @@
           <div class="container-fluid">
           <!-- Page Heading -->
             <h1 id='carrierLabel' class="h3 mb-2 text-gray-800">Loading...</h1>
-            <p id='dateLabel' class="mb-4"></p>
-            <p id='refLabel' class="mb-4"></p>
+            <p id='dateLabel' class="mb-1"></p>
+            <p id='weightLabel' class="mb-1"></p>
+            <p id='refLabel' class="mb-1"></p>
             <p id='trackingLabel' class="mb-4"></p>
             <div class="card shadow mb-4">
               <div class="card-header py-3">
@@ -83,6 +84,7 @@
     document.write("<script src='js/tracking.js?v=" + timestamp + "'><\/script>");
     document.write("<script src='js/plugins/taiwan_post.js?v=" + timestamp + "'><\/script>");
     document.write("<script src='js/plugins/pitney_bowes.js?v=" + timestamp + "'><\/script>");
+    document.write("<script src='js/plugins/sf_express.js?v=" + timestamp + "'><\/script>");
   </script>
   <script>
     $(document).ready(function()

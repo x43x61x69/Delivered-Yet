@@ -47,10 +47,10 @@ $.Carrier_TWNP = function(code)
           if (p.description == null)
           {
             p.description = s.description;
-          }
-          if (s.description == '投遞成功')
-          {
-            p.delivered = true;
+            if (p.description == '投遞成功')
+            {
+              p.delivered = true;
+            }
           }
           p.status.push(s);
         }
