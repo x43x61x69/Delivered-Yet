@@ -53,13 +53,10 @@ $.Carrier_PBI_Private = function(code, url)
   {
     // console.log(data);
     const msg = data;
+    p.carrier = msg['carrier'];
     if (msg['service'] !== undefined)
     {
-      p.carrier = msg['service'];
-    }
-    else
-    {
-      p.carrier = msg['carrier'];
+      p.carrier = p.carrier + ' (' + msg['service'] + ')';
     }
     p.reference = msg['orderId'];
     p.weight = msg['weight'] + ' ' + msg['weightUnit'];
