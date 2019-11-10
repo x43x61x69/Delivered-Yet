@@ -63,7 +63,7 @@ $.Callback = function(packageObj)
 
   if (packageObj.date !== null)
   {
-    $('#dateLabel').text('Estimated Delivery: ' + packageObj.date.format('YYYY/MM/DD hh:MM:SS A Z') + ' (' + packageObj.date.fromNow() + ')');
+    $('#dateLabel').text('Estimated Delivery: ' + packageObj.date.format('YYYY/MM/DD ddd [at] hh:MM:SS A Z') + ' (' + packageObj.date.fromNow() + ')');
   }
   else
   {
@@ -120,6 +120,10 @@ $.Callback = function(packageObj)
   {
     $('#durationLabel').text('Duration: ' + moment.duration(packageObj.status[0].date.diff(packageObj.status[statusCount - 1].date)).humanize());
   }
+  else if (statusCount == 1)
+  {
+    $('#durationLabel').text('Duration: ' + moment.duration(packageObj.status[0].date.diff(moment())).humanize());
+  }
   else
   {
     $('#durationLabel').remove();
@@ -149,7 +153,7 @@ $.Callback = function(packageObj)
       {
         $("#statusTable").find('tbody')
           .append($('<tr>')
-            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD ddd hh:mm:ss A')))
             .append($('<td>').text((i < count - 1) ? moment.duration(packageObj.status[i].date.diff(packageObj.status[i + 1].date)).humanize() : '-'))
             .append($('<td>').text(packageObj.status[i].location))
             .append($('<td>')
@@ -164,7 +168,7 @@ $.Callback = function(packageObj)
       {
         $("#statusTable").find('tbody')
           .append($('<tr>')
-            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD hh:mm:ss A')))
+            .append($('<td>').text(moment(packageObj.status[i].date).format('YYYY/MM/DD ddd hh:mm:ss A')))
             .append($('<td>').text((i < count - 1) ? moment.duration(packageObj.status[i].date.diff(packageObj.status[i + 1].date)).humanize() : '-'))
             .append($('<td>').text(packageObj.status[i].location))
             .append($('<td>').text(packageObj.status[i].description))
