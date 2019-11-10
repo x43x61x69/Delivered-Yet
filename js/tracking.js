@@ -39,6 +39,8 @@ function PackageObj()
   this.date = null;
   this.type = null;
   this.weight = null;
+  this.origin = null;
+  this.destination = null;
   this.delivered = false;
   this.status = [];
   this.error = false;
@@ -84,6 +86,24 @@ $.Callback = function(packageObj)
   else
   {
     $('#weightLabel').remove();
+  }
+
+  if (packageObj.origin !== null)
+  {
+    $('#originLabel').text('Origin: ' + packageObj.origin);
+  }
+  else
+  {
+    $('#originLabel').remove();
+  }
+
+  if (packageObj.destination !== null)
+  {
+    $('#destinationLabel').text('Destination: ' + packageObj.destination);
+  }
+  else
+  {
+    $('#destinationLabel').remove();
   }
 
   const statusCount = packageObj.status.length;

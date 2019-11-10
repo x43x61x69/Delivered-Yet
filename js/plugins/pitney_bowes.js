@@ -53,10 +53,63 @@ $.Carrier_PBI_Private = function(code, url)
   {
     // console.log(data);
     const msg = data;
-    p.carrier = msg['service'];
+    if (msg['service'] !== undefined)
+    {
+      p.carrier = msg['service'];
+    }
+    else
+    {
+      p.carrier = msg['carrier'];
+    }
     p.reference = msg['orderId'];
     p.weight = msg['weight'] + ' ' + msg['weightUnit'];
     p.date = $.GetDate(msg['estimatedDeliveryDate'] + ' ' + msg['estimatedDeliveryTime'], 'YYYY-MM-DD HH:mm:ssZ');
+
+    const origin = msg['senderLocation'];
+    if (origin !== undefined)
+    {
+      var loc = [];
+      if (origin['city'] != null)
+      {
+        loc.push(origin['city']);
+      }
+      if (origin['countyOrRegion'] != null)
+      {
+        loc.push(origin['countyOrRegion']);
+      }
+      if (origin['postalOrZipCode'] != null)
+      {
+        loc.push(origin['postalOrZipCode']);
+      }
+      if (origin['country'] != null)
+      {
+        loc.push(origin['country']);
+      }
+      p.origin = loc.join(', ');
+    }
+
+    const destination = msg['destinationLocation'];
+    if (destination !== undefined)
+    {
+      var loc = [];
+      if (destination['city'] != null)
+      {
+        loc.push(destination['city']);
+      }
+      if (destination['countyOrRegion'] != null)
+      {
+        loc.push(destination['countyOrRegion']);
+      }
+      if (destination['postalOrZipCode'] != null)
+      {
+        loc.push(destination['postalOrZipCode']);
+      }
+      if (destination['country'] != null)
+      {
+        loc.push(destination['country']);
+      }
+      p.destination = loc.join(', ');
+    }
 
     const currentStatus = msg['currentStatus'];
     if (currentStatus !== null)
