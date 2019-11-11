@@ -42,17 +42,35 @@ $.Carrier_TWNP = function(code)
           // console.log("data: " + JSON.stringify(items[i]));
           var s = new StatusObj();
           s.date = $.GetDate(items[i]['DATIME'], 'YYYYMMDDHHmmss', 8);
-          s.location = $.trim(items[i]['BRHNC']);
           s.description = $.trim(items[i]['STATUS']);
+          s.location = (items[i]['BRHNO'] !== null ? items[i]['BRHNO'] + ' ' : '') + $.trim(items[i]['BRHNC']);
+          s.destination = (items[i]['REVBRN-Z'] !== null ? items[i]['REVBRN-Z'] + ' ' : '') + $.trim(items[i]['REVBRC-Z']);
+          if (s.destination.length > 1)
+          {
+            s.description = s.description + ' (' + s.destination + ')'
+          }
+          p.status.push(s);
+        }
+
+        const statusCount = p.status.length;
+        if (statusCount > 0)
+        {
           if (p.description == null)
           {
-            p.description = s.description;
+            p.description = p.status[0].description;
             if (p.description == '投遞成功')
             {
               p.delivered = true;
             }
           }
-          p.status.push(s);
+
+          p.origin = p.status[statusCount - 1].location;
+          p.destination = p.status[0].destination;
+
+          if (p.delivered)
+          {
+            p.destination = p.status[0].location;
+          }
         }
       }
       else

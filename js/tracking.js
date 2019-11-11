@@ -24,6 +24,7 @@ function StatusObj()
 {
   this.date = null;
   this.location = null;
+  this.destination = null;
   this.description = null;
   this.url = null;
   this.error = false;
