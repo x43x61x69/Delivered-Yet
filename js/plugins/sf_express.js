@@ -35,7 +35,7 @@ $.Carrier_SFEX = function(code)
           if (p.description == null)
           {
             p.description = s.description;
-            const terms = ['妥投', '送达', '已签收'];
+            const terms = ['妥投', '送達', '已簽收', '代簽收'];
             $.each(terms, function(i, v)
             {
               var match = s.description.indexOf(v);
