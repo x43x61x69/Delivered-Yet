@@ -18,6 +18,15 @@ $.Carrier_SFEX = function(code)
   $.get('http://www.sftrack.net/cgi-bin/GInfo.dll?MfcISAPICommand=EmmisTrackGen&w=sftracken&cemskind=%CB%B3%B7%E1IBS&cno=' + code, function(data)
   {
     const content = $.s2t($(data).find("script:contains('document.writeln(MadeLine(')").html());
+    const delivered = $(data).find(".trackHead").html();
+    console.log(delivered);
+    console.log(delivered.indexOf('送达时间：'));
+    if (delivered !== undefined &&
+        delivered.indexOf('送达时间：') > -1)
+    {
+      p.delivered = true;
+    }
+    console.log(p.delivered);
     const items = content.split('\n');
     for (var i = items.length - 1; i > 0; i--)
     {
@@ -32,20 +41,24 @@ $.Carrier_SFEX = function(code)
           s.date = $.GetDate(itemElm[0], 'YYYY-MM-DD HH:mm:ss');
           s.location = $.trim(itemElm[1]);
           s.description = $.trim(itemElm[2]);
-          if (p.description == null)
-          {
-            p.description = s.description;
-            const terms = ['妥投', '送達', '已簽收', '代簽收'];
-            $.each(terms, function(i, v)
-            {
-              var match = s.description.indexOf(v);
-              if(match > -1)
-              {
-                p.delivered = true;
-              }
-            });
-          }
+          // if (p.description == null)
+          // {
+          //   p.description = s.description;
+          //   const terms = ['妥投', '送達', '已簽收', '代簽收'];
+          //   $.each(terms, function(i, v)
+          //   {
+          //     var match = s.description.indexOf(v);
+          //     if(match > -1)
+          //     {
+          //       p.delivered = true;
+          //     }
+          //   });
+          // }
           p.status.push(s);
+        }
+        if (p.description == null)
+        {
+          p.description = p.status[0].description;
         }
       }
     }

@@ -139,7 +139,7 @@ $.Callback = function(packageObj)
     }
     else
     {
-      $('#trackingLabel').text('Status: ' + packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transit' : 'No Information'));
+      $('#trackingLabel').text('Status: ' + (packageObj.delivered ? 'Delivered' : (count > 0 ? 'In Transit' : 'No Information')));
     }
 
     for (var i = 0; i < count; i++)
