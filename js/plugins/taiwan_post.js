@@ -58,7 +58,7 @@ $.Carrier_TWNP = function(code)
           if (p.description == null)
           {
             p.description = p.status[0].description;
-            if (p.description == '投遞成功')
+            if (p.description.endsWith('成功'))
             {
               p.delivered = true;
             }
