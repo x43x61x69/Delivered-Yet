@@ -43,11 +43,11 @@ $.Carrier_TWNP = function(code)
           var s = new StatusObj();
           s.date = $.GetDate(items[i]['DATIME'], 'YYYYMMDDHHmmss', 8);
           s.description = $.trim(items[i]['STATUS']);
-          s.location = (items[i]['BRHNO'] !== null ? items[i]['BRHNO'] + ' ' : '') + $.trim(items[i]['BRHNC']);
-          s.destination = (items[i]['REVBRN-Z'] !== null ? items[i]['REVBRN-Z'] + ' ' : '') + $.trim(items[i]['REVBRC-Z']);
-          if (s.destination.length > 1)
+          s.location = (items[i]['BRHNO'] !== undefined ? items[i]['BRHNO'] + ' ' : '') + $.trim(items[i]['BRHNC']);
+          if (items[i]['REVBRN-Z'] !== undefined)
           {
-            s.description = s.description + ' (' + s.destination + ')'
+            s.destination = items[i]['REVBRN-Z'] + ' ' + $.trim(items[i]['REVBRC-Z']);
+            s.description = s.description + ' (' + s.destination + ')';
           }
           p.status.push(s);
         }
